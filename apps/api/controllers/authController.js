@@ -27,7 +27,22 @@ async function signup(req, res) {
 }
 
 async function login(req, res) {
-    res.json("")
+    try {
+        const { email, password } = req.body;
+        const user = await prisma.user.findUnique({
+            where: { email }
+        })
+        if (!user) return res.status(400).json({ message: "User does not exist" })
+        const isMatch = await bcrypt.compare(password, user.password)
+        if (!isMatch) {
+            return res.status(401).json({ message: "Invalid credentials" })
+        }
+        const { password: _, ...safeUser } = user;
+        res.status(200).json(safeUser)
+    } catch(err) {
+        console.error(err)
+        res.status(500).json({ message: "Something went wrong" })
+    }
 }
 
 async function logout(req, res) {
