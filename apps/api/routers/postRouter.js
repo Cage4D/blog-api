@@ -10,7 +10,7 @@ postRouter.get("/posts/:id", postController.fetchPost)
 //ADMIN PRIVILEDGES
 postRouter.post("/posts", authController.authenticateToken, postController.createPost)
 postRouter.put("/posts/:id", authController.authenticateToken, postController.updatePost)
-postRouter.delete("/posts/:id", (req, res) => {})
+postRouter.delete("/posts/:id", authController.authenticateToken, postController.deletePost)
 
 
 module.exports = postRouter;

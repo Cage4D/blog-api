@@ -108,4 +108,5 @@ module.exports = {
     fetchDrafts,
     createPost,
     updatePost,
+    deletePost
 }
