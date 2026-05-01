@@ -1,6 +1,7 @@
 const prisma = require("../../../prisma/client")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+require("dotenv").config()
 
 async function signup(req, res) {
     try {
