@@ -1,5 +1,6 @@
 const prisma = require("../../../prisma/client")
 const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
 
 async function signup(req, res) {
     try {
@@ -49,8 +50,22 @@ async function logout(req, res) {
     res.status(200).json({ message: "Logged out successfully" })
 }
 
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers["authorization"]
+    const token = authHeader && authHeader.split(" ")[1];
+    if (!token) return res.status(401).json({ error: "Access Denied: No Token" })
+    try {
+        const verified = jwt.verify(token, process.env.JWT_SECRET)
+        req.user = verified;
+        next()
+    } catch(err) {
+        res.status(403).json({ error: "Invalid or expired token" })
+    }
+}
+
 module.exports = {
     signup,
     login,
     logout,
+    authenticateToken
 }
