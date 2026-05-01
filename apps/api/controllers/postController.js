@@ -55,9 +55,36 @@ async function createPost(req, res) {
     }
 }
 
+async function updatePost(req, res) {
+    try {
+        const { title, content } = req.body
+        const postId = parseFloat(req.params.id)
+        const post = await prisma.post.findUnique({
+            where: {
+                id: postId
+            }
+        })
+        if (!post) return res.status(404).json({ error: "Post not found" })
+        if (req.user.id !== post.authorId) return res.status(403).json({ error: "Forbidden" });
+        const updatedPost = await prisma.post.update({
+            where: {
+                id: postId
+            },
+            data: {
+                title,
+                content
+            }
+        })
+        res.status(200).json(updatedPost)
+    } catch(err) {
+        res.status(500).json({ error: "Couldn't update post" })
+    }
+}
+
 module.exports = {
     displayAllPosts,
     fetchPost,
     fetchDrafts,
-    createPost
+    createPost,
+    updatePost,
 }
