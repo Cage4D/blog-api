@@ -3,7 +3,7 @@ const postRouter = Router()
 const postController = require("../controllers/postController")
 
 postRouter.get("/posts", postController.displayAllPosts)
-postRouter.get("/posts/drafts", (req, res) => {})
+postRouter.get("/posts/drafts", postController.fetchDrafts)
 postRouter.get("/posts/:id", postController.fetchPost)
 
 //ADMIN PRIVILEDGES

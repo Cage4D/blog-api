@@ -1,4 +1,5 @@
 const prisma = require("../../../prisma/client")
+const authController = require("./authController")
 
 async function displayAllPosts(req, res) {
     try {
@@ -21,7 +22,22 @@ async function fetchPost(req, res) {
     }
 }
 
+async function fetchDrafts(req, res) {
+    try {
+        const drafts = await prisma.post.findMany({
+            where: {
+                published: false,
+                authorId: req.user.id,
+            }
+        })
+        res.json(drafts)
+    } catch(err) {
+        res.status(500).json({ error: "Failed to fetch drafts" })
+    }
+}
+
 module.exports = {
     displayAllPosts,
     fetchPost,
+    fetchDrafts,
 }
