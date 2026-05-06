@@ -1,6 +1,7 @@
+const { prisma } = require("../lib/prisma")
 const { Router } = require("express")
 const commentRouter = Router()
-const prisma = require("../../../prisma/client")
+
 
 async function fetchAllcomments(req, res) {
     try {
