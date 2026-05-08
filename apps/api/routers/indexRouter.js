@@ -2,7 +2,7 @@ const { Router } = require("express")
 const indexRouter = Router()
 
 indexRouter.get("/", (req, res) => {
-    res.send("listening on port 3000")
+    res.redirect("/posts")
 })
 indexRouter.post("/", (req, res) => {})
 
