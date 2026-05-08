@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "web": "vite --config apps/web/vite.config.js",
-    "web:build": "vite build --config apps/web/vite.config.js"
+    "web": "cd apps/web && vite",
+    "web:build": "cd apps/web && vite build"
   },
   "repository": {
     "type": "git",
