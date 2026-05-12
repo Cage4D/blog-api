@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 function SignUp() {
   const [formData, setFormData] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -18,7 +18,7 @@ function SignUp() {
   const handleSubmit = async (e) => {
   e.preventDefault();
 
-  if (!formData.name || !formData.email || !formData.password) {
+  if (!formData.username || !formData.email || !formData.password) {
     alert("Please fill in all fields");
     return;
   }
@@ -40,7 +40,7 @@ function SignUp() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: formData.name,
+        username: formData.username,
         email: formData.email,
         password: formData.password,
       }),
@@ -58,7 +58,7 @@ function SignUp() {
     alert("Signup successful!");
 
     setFormData({
-      name: "",
+      username: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -80,13 +80,13 @@ function SignUp() {
           {/* Name */}
           <div>
             <label className="block mb-1 text-sm font-medium text-gray-700">
-              Full Name
+              Username
             </label>
             <input
               type="text"
-              name="name"
+              name="username"
               placeholder="John Doe"
-              value={formData.name}
+              value={formData.username}
               onChange={handleChange}
               required
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
