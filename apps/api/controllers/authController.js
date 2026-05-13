@@ -7,7 +7,7 @@ async function signup(req, res) {
     try {
         const { email, username, password } = req.body;
         if (!email || !username || !password) {
-            res.status(400).json({ message: "All fields are required" })
+            return res.status(400).json({ message: "All fields are required" })
         }
         const hashedPassword = await bcrypt.hash(password, 10)
         const user = await prisma.user.create({
