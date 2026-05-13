@@ -43,6 +43,7 @@ function Login() {
       console.log("Logged in:", data);
 
       alert("Login successful!");
+      localStorage.setItem("token", data.token)
       navigate("/home")
 
       setFormData({

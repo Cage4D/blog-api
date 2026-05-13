@@ -1,7 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   const [posts, setPosts] = React.useState([]);
+  const navigate = useNavigate()
+  const handleLogout = () => {
+    localStorage.removeItem("token")
+    navigate("/login")
+  }
 
   React.useEffect(() => {
     fetch("/api/")
@@ -19,7 +25,9 @@ function Home() {
             My Dashboard
           </h1>
 
-          <button className="px-4 py-2 text-sm text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">
+          <button 
+          className="px-4 py-2 text-sm text-white bg-indigo-600 rounded-lg hover:bg-indigo-700"
+          onClick={handleLogout}>
             Logout
           </button>
         </div>
