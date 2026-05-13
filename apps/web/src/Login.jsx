@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 
 function Login() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+    const navigate = useNavigate()
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+    });
 
   const handleChange = (e) => {
     setFormData({
@@ -41,6 +43,7 @@ function Login() {
       console.log("Logged in:", data);
 
       alert("Login successful!");
+      navigate("/home")
 
       setFormData({
         email: "",
