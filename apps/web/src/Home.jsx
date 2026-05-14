@@ -10,11 +10,23 @@ function Home() {
   }
 
   React.useEffect(() => {
-    fetch("/api/")
-      .then((res) => res.json())
-      .then((data) => setPosts(data))
-      .catch((err) => console.error(err));
-  }, []);
+  const token = localStorage.getItem("token");
+
+  fetch("/api/", {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      if (res.status === 401 || res.status === 403) {
+        navigate("/login");
+        return;
+      }
+      return res.json();
+    })
+    .then((data) => data && setPosts(data))
+    .catch((err) => console.error(err));
+}, []);
 
   return (
     <div className="min-h-screen bg-gray-100">
