@@ -3,7 +3,11 @@ const authController = require("./authController")
 
 async function displayAllPosts(req, res) {
     try {
-        const posts = await prisma.post.findMany()
+        const posts = await prisma.post.findMany({
+            where: {
+                published: true
+            }
+        })
         res.json(posts)
     } catch(err) {
         res.status(500).json({ error: "failed to fetch posts" })
@@ -39,16 +43,17 @@ async function fetchDrafts(req, res) {
 async function createPost(req, res) {
     try {
         const { title, content } = req.body
+        if (!title || !content) {
+            return res.status(400).json({ error: "Title and content are required" })
+        }
         const post = await prisma.post.create({
             data: {
                 title,
                 content,
-                authorId: req.user.id
+                authorId: req.user.id,
+                published: true,
             }
         })
-        if (!title || !content) {
-            return res.status(400).json({ error: "Title and content are required" })
-        }
         res.status(201).json(post)
     } catch(err) {
         res.status(500).json({ error: "Couldn't create post" })
