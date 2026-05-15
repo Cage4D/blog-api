@@ -3,6 +3,7 @@ import Home from "./Home";
 import React from "react";
 import SignUp from "./Signup";
 import Login from "./Login";
+import CreatePost from "./CreatePost";
 import { Routes, Route } from "react-router-dom";
 
 export default function App() {
@@ -11,6 +12,7 @@ export default function App() {
       <Route path="/" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
       <Route path="/home" element={<Home />} />
+      <Route path="/create-post" element={<CreatePost />} />
     </Routes>
   );
 }
