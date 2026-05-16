@@ -1,16 +1,41 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 function Home() {
   const [posts, setPosts] = React.useState([]);
-  const navigate = useNavigate()
+  const [currentUserId, setCurrentUserId] = React.useState(null);
+  const navigate = useNavigate();
+
   const handleLogout = () => {
-    localStorage.removeItem("token")
-    navigate("/login")
-  }
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
+  const handleDelete = async (postId) => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await fetch(`/api/posts/${postId}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+      if (res.ok) {
+        setPosts((prev) => prev.filter((p) => p.id !== postId));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   React.useEffect(() => {
     const token = localStorage.getItem("token");
+
+    if (token) {
+      const decoded = jwtDecode(token);
+      setCurrentUserId(decoded.id);
+    }
 
     fetch("/api/posts", {
       headers: {
@@ -70,9 +95,26 @@ function Home() {
                 key={post.id}
                 className="bg-white p-5 rounded-xl shadow hover:shadow-md transition"
               >
-                <h3 className="text-lg font-semibold text-gray-800">
-                  {post.title}
-                </h3>
+                <div className="flex justify-between items-start">
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    {post.title}
+                  </h3>
+
+                  {currentUserId === post.authorId && (
+                    <div className="flex gap-2 ml-4 shrink-0">
+                      <button
+                        className="px-3 py-1 text-xs text-indigo-600 border border-indigo-300 rounded-lg hover:bg-indigo-50"
+                        onClick={() => navigate(`/edit-post/${post.id}`)}>
+                        Edit
+                      </button>
+                      <button
+                        className="px-3 py-1 text-xs text-red-600 border border-red-300 rounded-lg hover:bg-red-50"
+                        onClick={() => handleDelete(post.id)}>
+                        Delete
+                      </button>
+                    </div>
+                  )}
+                </div>
 
                 <div
                   className="text-gray-600 mt-2 prose prose-sm max-w-none"
