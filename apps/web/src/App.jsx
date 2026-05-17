@@ -1,9 +1,5 @@
 import "../styles.css";
-import Home from "./Home";
-import React from "react";
-import SignUp from "./Signup";
-import Login from "./Login";
-import CreatePost from "./CreatePost";
+import { SignUp, Login, Home, CreatePost, EditPost } from "./imports";
 import { Routes, Route } from "react-router-dom";
 
 export default function App() {
@@ -13,6 +9,7 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/home" element={<Home />} />
       <Route path="/create-post" element={<CreatePost />} />
+      <Route path="/edit-post/:id" element={<EditPost />} />
     </Routes>
   );
 }
