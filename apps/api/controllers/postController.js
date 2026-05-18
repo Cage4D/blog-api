@@ -16,8 +16,9 @@ async function displayAllPosts(req, res) {
 
 async function fetchPost(req, res) {
     try {
+        const postId = parseInt(req.params.id, 10)
         const post = await prisma.post.findUnique({
-            where: { id: req.params.id }
+            where: { id: postId }
         })
         if (!post) return res.status(500).json({ error: "post not found" })
         res.json(post)
