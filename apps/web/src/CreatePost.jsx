@@ -41,7 +41,7 @@ function CreatePost() {
         return;
       }
 
-      navigate("/");
+      navigate("/home");
     } catch (err) {
       console.error(err);
       setError("Something went wrong. Please try again.");
