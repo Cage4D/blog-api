@@ -9,7 +9,7 @@ function CreatePost() {
   const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async () => {
+  const handlePost = async (published) => {
     setError("");
 
     if (!title.trim() || !content.trim()) {
@@ -27,7 +27,7 @@ function CreatePost() {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
         },
-        body: JSON.stringify({ title, content }),
+        body: JSON.stringify({ title, content, published }),
       });
 
       if (res.status === 401 || res.status === 403) {
@@ -41,7 +41,7 @@ function CreatePost() {
         return;
       }
 
-      navigate("/home");
+      navigate(published ? "/home" : "/drafts");
     } catch (err) {
       console.error(err);
       setError("Something went wrong. Please try again.");
@@ -58,7 +58,7 @@ function CreatePost() {
           <h1 className="text-2xl font-bold text-indigo-600">New Post</h1>
           <button
             className="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
-            onClick={() => navigate("/")}>
+            onClick={() => navigate("/home")}>
             ← Back
           </button>
         </div>
@@ -114,9 +114,15 @@ function CreatePost() {
           </div>
 
           {/* Submit */}
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-3">
             <button
-              onClick={handleSubmit}
+              onClick={() => handlePost(false)}
+              disabled={loading}
+              className="px-6 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+              {loading ? "Saving..." : "Save as Draft"}
+            </button>
+            <button
+              onClick={() => handlePost(true)}
               disabled={loading}
               className="px-6 py-2 text-sm text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed">
               {loading ? "Publishing..." : "Publish Post"}

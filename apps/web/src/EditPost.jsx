@@ -36,7 +36,7 @@ function EditPost() {
       .finally(() => setFetching(false));
   }, [id]);
 
-  const handleSubmit = async () => {
+  const handleUpdate = async (published) => {
     setError("");
 
     if (!title.trim() || !content.trim()) {
@@ -54,7 +54,7 @@ function EditPost() {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
         },
-        body: JSON.stringify({ title, content }),
+        body: JSON.stringify({ title, content, published }),
       });
 
       if (res.status === 401 || res.status === 403) {
@@ -68,7 +68,7 @@ function EditPost() {
         return;
       }
 
-      navigate("/home");
+      navigate(published ? "/home" : "/drafts");
     } catch (err) {
       console.error(err);
       setError("Something went wrong. Please try again.");
@@ -93,7 +93,7 @@ function EditPost() {
           <h1 className="text-2xl font-bold text-indigo-600">Edit Post</h1>
           <button
             className="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
-            onClick={() => navigate("/")}>
+            onClick={() => navigate("/home")}>
             ← Back
           </button>
         </div>
@@ -149,9 +149,15 @@ function EditPost() {
           </div>
 
           {/* Submit */}
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-3">
             <button
-              onClick={handleSubmit}
+              onClick={() => handleUpdate(false)}
+              disabled={loading}
+              className="px-6 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+              {loading ? "Saving..." : "Move to Drafts"}
+            </button>
+            <button
+              onClick={() => handleUpdate(true)}
               disabled={loading}
               className="px-6 py-2 text-sm text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed">
               {loading ? "Saving..." : "Save Changes"}

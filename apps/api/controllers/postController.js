@@ -43,7 +43,7 @@ async function fetchDrafts(req, res) {
 
 async function createPost(req, res) {
     try {
-        const { title, content } = req.body
+        const { title, content, published } = req.body
         if (!title || !content) {
             return res.status(400).json({ error: "Title and content are required" })
         }
@@ -52,7 +52,7 @@ async function createPost(req, res) {
                 title,
                 content,
                 authorId: req.user.id,
-                published: true,
+                published: published ?? true,
             }
         })
         res.status(201).json(post)
@@ -63,7 +63,7 @@ async function createPost(req, res) {
 
 async function updatePost(req, res) {
     try {
-        const { title, content } = req.body
+        const { title, content, published } = req.body
         const postId = parseInt(req.params.id, 10)
         const post = await prisma.post.findUnique({
             where: {
@@ -78,7 +78,8 @@ async function updatePost(req, res) {
             },
             data: {
                 title,
-                content
+                content,
+                ...(published !== undefined && { published })
             }
         })
         res.status(200).json(updatedPost)
