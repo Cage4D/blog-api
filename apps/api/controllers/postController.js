@@ -20,7 +20,7 @@ async function fetchPost(req, res) {
         const post = await prisma.post.findUnique({
             where: { id: postId }
         })
-        if (!post) return res.status(500).json({ error: "post not found" })
+        if (!post) return res.status(404).json({ error: "post not found" })
         res.json(post)
     } catch(err) {
         res.status(500).json({ error: "Failed to fetch post" })
@@ -66,21 +66,19 @@ async function updatePost(req, res) {
         const { title, content, published } = req.body
         const postId = parseInt(req.params.id, 10)
         const post = await prisma.post.findUnique({
-            where: {
-                id: postId
-            }
+            where: { id: postId }
         })
         if (!post) return res.status(404).json({ error: "Post not found" })
-        if (req.user.id !== post.authorId) return res.status(403).json({ error: "Forbidden" });
+        if (req.user.id !== post.authorId) return res.status(403).json({ error: "Forbidden" })
+
+        const data = {};
+        if (title !== undefined) data.title = title;
+        if (content !== undefined) data.content = content;
+        if (published !== undefined) data.published = published;
+
         const updatedPost = await prisma.post.update({
-            where: {
-                id: postId
-            },
-            data: {
-                title,
-                content,
-                ...(published !== undefined && { published })
-            }
+            where: { id: postId },
+            data
         })
         res.status(200).json(updatedPost)
     } catch(err) {
@@ -90,20 +88,16 @@ async function updatePost(req, res) {
 
 async function deletePost(req, res) {
     try {
-            const postId = parseInt(req.params.id, 10)
-            const post = await prisma.post.findUnique({
-                where: {
-                    id: postId
-                }
-            })
-            if (!post) return res.status(404).json({ error: "Post not found"})
-            if (req.user.id !== post.authorId) return res.status(403).json({ error: "Forbidden" })
-            await prisma.post.delete({
-            where: {
-                id: postId
-            }
-            })
-            res.status(200).json({ message: "Post deleted successfully"})
+        const postId = parseInt(req.params.id, 10)
+        const post = await prisma.post.findUnique({
+            where: { id: postId }
+        })
+        if (!post) return res.status(404).json({ error: "Post not found" })
+        if (req.user.id !== post.authorId) return res.status(403).json({ error: "Forbidden" })
+        await prisma.post.delete({
+            where: { id: postId }
+        })
+        res.status(200).json({ message: "Post deleted successfully" })
     } catch(err) {
         res.status(500).json({ error: "Something went wrong" })
     }

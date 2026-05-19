@@ -1,5 +1,5 @@
 import "../styles.css";
-import { SignUp, Login, Home, CreatePost, EditPost } from "./imports";
+import { SignUp, Login, Home, CreatePost, EditPost, Drafts } from "./imports";
 import { Routes, Route } from "react-router-dom";
 
 export default function App() {
@@ -10,6 +10,7 @@ export default function App() {
       <Route path="/home" element={<Home />} />
       <Route path="/create-post" element={<CreatePost />} />
       <Route path="/edit-post/:id" element={<EditPost />} />
+      <Route path="/drafts" element={<Drafts />} />
     </Routes>
   );
 }

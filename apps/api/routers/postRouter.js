@@ -4,7 +4,7 @@ const postController = require("../controllers/postController")
 const authController = require("../controllers/authController")
 
 postRouter.get("/", postController.displayAllPosts)
-postRouter.get("/drafts", postController.fetchDrafts)
+postRouter.get("/drafts",authController.authenticateToken, postController.fetchDrafts)
 postRouter.get("/:id", postController.fetchPost)
 
 //ADMIN PRIVILEDGES
