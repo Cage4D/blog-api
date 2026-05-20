@@ -99,8 +99,9 @@ function Home() {
             {posts.map((post) => (
               <div
                 key={post.id}
-                className="bg-white p-5 rounded-xl shadow hover:shadow-md transition"
-              >
+                className="bg-white p-5 rounded-xl shadow hover:shadow-md transition cursor-pointer"
+                onClick={() => navigate(`/posts/${post.id}`)}>
+
                 <div className="flex justify-between items-start">
                   <h3 className="text-lg font-semibold text-gray-800">
                     {post.title}
@@ -110,12 +111,18 @@ function Home() {
                     <div className="flex gap-2 ml-4 shrink-0">
                       <button
                         className="px-3 py-1 text-xs text-indigo-600 border border-indigo-300 rounded-lg hover:bg-indigo-50"
-                        onClick={() => navigate(`/edit-post/${post.id}`)}>
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/edit-post/${post.id}`);
+                        }}>
                         Edit
                       </button>
                       <button
                         className="px-3 py-1 text-xs text-red-600 border border-red-300 rounded-lg hover:bg-red-50"
-                        onClick={() => handleDelete(post.id)}>
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(post.id);
+                        }}>
                         Delete
                       </button>
                     </div>
