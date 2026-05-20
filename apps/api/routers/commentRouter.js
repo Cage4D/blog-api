@@ -1,5 +1,5 @@
 const { Router } = require("express")
-const commentRouter = Router()
+const commentRouter = Router({ mergeParams: true })
 const commentController = require("../controllers/commentController")
 const authController = require("../controllers/authController")
 
