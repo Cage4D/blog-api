@@ -21,7 +21,7 @@ function Home() {
           "Authorization": `Bearer ${token}`,
         },
       });
-      if (res.ok) {
+      if (res.ok) {  
         setPosts((prev) => prev.filter((p) => p.id !== postId));
       }
     } catch (err) {
